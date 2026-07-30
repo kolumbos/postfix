@@ -34,7 +34,7 @@ RUN set -eux; \
 FROM debian:${DEBIAN_VERSION} AS postfix
 
 ARG POSTFIX_UID=1000
-ARG POSTFIX_DIG=1000
+ARG POSTFIX_GID=1000
 ARG POSTDROP_GID=1000
 
 RUN set -eux; \
@@ -65,11 +65,11 @@ EXPOSE 10025
 EXPOSE 10465
 EXPOSE 10587
 
-ENV DOMAIN_NAME "example.org"
-ENV HOSTNAME "smtp.example.org"
-ENV MAILBOX_TRANSPORT "lmtp.example.org:10024"
-ENV INCOMING_MILTERS ""
-ENV OUTGOING_MILTERS ""
+ENV DOMAIN_NAME="example.org"
+ENV HOSTNAME="smtp.example.org"
+ENV MAILBOX_TRANSPORT="lmtp.example.org:10024"
+ENV INCOMING_MILTERS=""
+ENV OUTGOING_MILTERS=""
 
 ENTRYPOINT [ "entrypoint.sh" ]
 CMD [ "/usr/sbin/postfix", "start-fg" ]
