@@ -71,5 +71,5 @@ ENV MAILBOX_TRANSPORT="lmtp.example.org:10024"
 ENV INCOMING_MILTERS=""
 ENV OUTGOING_MILTERS=""
 
-ENTRYPOINT [ "entrypoint.sh" ]
+ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "/usr/sbin/postfix", "start-fg" ]
