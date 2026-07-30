@@ -55,8 +55,8 @@ smtpd_data_restrictions =
         reject_unauth_pipelining
 #smtpd_end_of_data_restrictions =
 
-mydomain = example.org
-myhostname = smtp.$mydomain
+mydomain = $DOMAIN_NAME
+myhostname = $HOSTNAME
 myorigin = $mydomain
 mydestination = $mydomain
 
@@ -71,6 +71,7 @@ alias_maps = hash:/etc/postfix/aliases
 
 local_recipient_maps = 
 recipient_delimiter = +
+mailbox_transport = lmtp:inet:$MAILBOX_TRANSPORT
 
 inet_interfaces = all
 inet_protocols = all
@@ -78,3 +79,8 @@ inet_protocols = all
 # Milter Configuration
 milter_default_action = accept
 milter_protocol = 6
+# Incoming Milters
+smtpd_milters = $INCOMING_MILTERS
+# Outgoing Milters
+non_smtpd_milters = $OUTGOING_MILTERS
+

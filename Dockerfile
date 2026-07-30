@@ -65,5 +65,11 @@ EXPOSE 10025
 EXPOSE 10465
 EXPOSE 10587
 
+ENV DOMAIN_NAME "example.org"
+ENV HOSTNAME "smtp.example.org"
+ENV MAILBOX_TRANSPORT "lmtp.example.org:10024"
+ENV INCOMING_MILTERS ""
+ENV OUTGOING_MILTERS ""
+
 ENTRYPOINT [ "entrypoint.sh" ]
 CMD [ "/usr/sbin/postfix", "start-fg" ]
