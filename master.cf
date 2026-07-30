@@ -9,8 +9,8 @@
 # service type  private unpriv  chroot  wakeup  maxproc command + args
 #               (yes)   (yes)   (no)    (never) (100)
 # ==========================================================================
-smtp      inet:10025  n       -       n       -       -       smtpd
-submission inet:10587 n       -       n       -       -       smtpd
+smtp      inet  n       -       n       -       -       smtpd
+submission inet n       -       n       -       -       smtpd
   -o syslog_name=postfix/submission
   -o smtpd_forbid_unauth_pipelining=no
   -o smtpd_tls_security_level=encrypt
@@ -19,7 +19,7 @@ submission inet:10587 n       -       n       -       -       smtpd
   -o smtpd_hide_client_session=yes
   -o smtpd_reject_unlisted_recipient=no
   -o milter_macro_daemon_name=ORIGINATING
-submissions     inet:10465  n       -       n       -       -       smtpd
+submissions     inet n       -       n       -       -       smtpd
   -o syslog_name=postfix/submissions
   -o smtpd_forbid_unauth_pipelining=no
   -o smtpd_tls_wrappermode=yes
@@ -47,8 +47,8 @@ showq     unix  n       -       n       -       -       showq
 error     unix  -       -       n       -       -       error
 retry     unix  -       -       n       -       -       error
 discard   unix  -       -       n       -       -       discard
-local     unix  -       -       n       -       -       local
-virtual   unix  -       -       n       -       -       virtual
+local     unix  -       n       n       -       -       local
+virtual   unix  -       n       n       -       -       virtual
 lmtp      unix  -       -       n       -       -       lmtp
 anvil     unix  -       -       n       -       1       anvil
 scache    unix  -       -       n       -       1       scache

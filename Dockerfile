@@ -61,13 +61,13 @@ RUN set -eux; \
     chmod g+s /usr/sbin/postqueue /usr/sbin/postdrop; \
     chgrp postdrop /var/spool/postfix/maildrop /var/spool/postfix/public /usr/sbin/postqueue /usr/sbin/postdrop
 
-EXPOSE 10025
-EXPOSE 10465
-EXPOSE 10587
+EXPOSE 25
+EXPOSE 465
+EXPOSE 587
 
 ENV DOMAIN_NAME="example.org"
 ENV HOSTNAME="smtp.example.org"
-ENV MAILBOX_TRANSPORT="lmtp.example.org:10024"
+ENV MAILBOX_TRANSPORT="lmtp.example.org:24"
 ENV INCOMING_MILTERS=""
 ENV OUTGOING_MILTERS=""
 
