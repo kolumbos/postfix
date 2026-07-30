@@ -1,7 +1,8 @@
 #!/bin/sh
 
 if [ -n "${UPDATE_MAPS}"]; then
-  IFS=',' read -r -a maps_array <<< "${UPDATE_MAPS}"
+  readarray -td, maps_array <<<"${UPDATE_MAPS}"
+  declare -p maps_array
   for map in "${maps_array[@]}"; do
     echo "hashing map $map"
     /usr/sbin/postmap $map
