@@ -1,9 +1,9 @@
-ARG DEBIAN_VERSION 13-slim
+ARG DEBIAN_VERSION=13-slim
 FROM debian:${DEBIAN_VERSION} AS postfix-build
 
-ARG POSTFIX_REPO_URL https://github.com/vdukhovni/postfix.git
-ARG POSTFIX_VERSION 3.10.5
-ARG POSTFIX_BRANCH "v${POSTFIX_VERSION}"
+ARG POSTFIX_REPO_URL=https://github.com/vdukhovni/postfix.git
+ARG POSTFIX_VERSION=3.10.5
+ARG POSTFIX_BRANCH="v${POSTFIX_VERSION}"
 
 RUN set -eux; \
     apt-get update; \
@@ -33,9 +33,9 @@ RUN set -eux; \
 
 FROM debian:${DEBIAN_VERSION} AS postfix
 
-ARG POSTFIX_UID 1000
-ARG POSTFIX_DIG 1000
-ARG POSTDROP_GID 1000
+ARG POSTFIX_UID=1000
+ARG POSTFIX_DIG=1000
+ARG POSTDROP_GID=1000
 
 RUN set -eux; \
     apt-get update; \
