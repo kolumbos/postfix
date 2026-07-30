@@ -1,0 +1,69 @@
+ARG DEBIAN_VERSION 13-slim
+FROM debian:${DEBIAN_VERSION} AS postfix-build
+
+ARG POSTFIX_REPO_URL https://github.com/vdukhovni/postfix.git
+ARG POSTFIX_VERSION 3.10.5
+ARG POSTFIX_BRANCH "v${POSTFIX_VERSION}"
+
+RUN set -eux; \
+    apt-get update; \
+    apt-get install --yes --no-install-recommends ca-certificates git make m4 build-essential libdb5.3-dev libnsl-dev libicu-dev; \
+    rm -rf /var/lib/apt/lists/*
+
+RUN set -eux; \
+    mkdir /build; \
+    chown nobody /build
+
+WORKDIR /build
+USER nobody
+
+RUN set -eux; \
+    git clone --single-branch --branch ${POSTFIX_BRANCH} ${POSTFIX_REPO_URL} .
+
+WORKDIR /build/postfix
+
+RUN set -eux; \
+    make
+
+USER root
+
+RUN set -eux; \
+    mkdir /install; \
+    make non-interactive-package install_root=/install
+
+FROM debian:${DEBIAN_VERSION} AS postfix
+
+ARG POSTFIX_UID 1000
+ARG POSTFIX_DIG 1000
+ARG POSTDROP_GID 1000
+
+RUN set -eux; \
+    apt-get update; \
+    apt-get install --yes --no-install-recommends ca-certificates libdb5.3 libnsl2 libicu76; \
+    rm -rf /var/lib/apt/lists/*
+
+RUN set -eux; \
+    mkdir -p /etc/postfix; \
+    mkdir -p /var/spool/postfix; \
+    groupadd -g ${POSTFIX_GID} postfix; \
+    useradd -u ${POSTFIX_UID} -g postfix -G root -d /var/spool/postfix -s /usr/sbin/nologin postfix; \
+    groupadd -g ${POSTDROP_GID} postdrop
+
+COPY --link --from=postfix-build /install /
+COPY --chmod=0755 entrypoint.sh /entrypoint.sh
+COPY --chmod=0640 master.cf /etc/postfix/master.cf
+COPY --chmod=0640 main.cf /etc/postfix/main.cf
+COPY --chmod=0640 aliases /etc/postfix/aliases
+
+RUN set -eux; \
+    chown postfix /var/spool/postfix/* /var/lib/postfix; \
+    chown root /var/spool/postfix/pid; \
+    chmod g+s /usr/sbin/postqueue /usr/sbin/postdrop; \
+    chgrp postdrop /var/spool/postfix/maildrop /var/spool/postfix/public /usr/sbin/postqueue /usr/sbin/postdrop
+
+EXPOSE 10025
+EXPOSE 10465
+EXPOSE 10587
+
+ENTRYPOINT [ "entrypoint.sh" ]
+CMD [ "/usr/sbin/postfix", "start-fg" ]
