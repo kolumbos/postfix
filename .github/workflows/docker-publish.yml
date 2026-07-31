@@ -75,6 +75,8 @@ jobs:
         with:
           context: .
           target: postfix
+          build-args: |
+            POSTFIX_VERSION=${{ github.ref_type == 'tag' && github.ref_name || '3.10.5' }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
