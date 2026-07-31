@@ -39,7 +39,7 @@ ARG POSTDROP_GID=1001
 
 RUN set -eux; \
     apt-get update; \
-    apt-get install --yes --no-install-recommends ca-certificates libdb5.3 libnsl2 libicu76; \
+    apt-get install --yes --no-install-recommends ca-certificates libdb5.3 libnsl2 libicu76 gettext-base; \
     rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
@@ -52,7 +52,7 @@ RUN set -eux; \
 COPY --link --from=postfix-build /install /
 COPY --chmod=0755 entrypoint.sh /entrypoint.sh
 COPY --chmod=0640 master.cf /etc/postfix/master.cf
-COPY --chmod=0640 main.cf /etc/postfix/main.cf
+COPY --chmod=0640 main.cf.tpl /etc/postfix/main.cf.tpl
 COPY --chmod=0640 aliases /etc/postfix/aliases
 
 RUN set -eux; \
@@ -62,12 +62,11 @@ RUN set -eux; \
     chgrp postdrop /var/spool/postfix/maildrop /var/spool/postfix/public /usr/sbin/postqueue /usr/sbin/postdrop
 
 EXPOSE 25
-EXPOSE 465
-EXPOSE 587
 
-ENV DOMAIN_NAME="example.org"
+ENV DOMAIN="example.org"
 ENV HOSTNAME="smtp.example.org"
-ENV MAILBOX_TRANSPORT="lmtp.example.org:24"
+ENV TRANSPORT="lmtp.example.org"
+ENV MILTER_DEFAULT="accept"
 ENV INCOMING_MILTERS=""
 ENV OUTGOING_MILTERS=""
 

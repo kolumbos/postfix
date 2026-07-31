@@ -8,7 +8,7 @@ readme_directory = no
 
 compatibility_level = 3.10
 
-import_environment = MAIL_CONFIG MAIL_DEBUG MAIL_LOGTAG TZ LANG=C DOMAIN_NAME HOSTNAME MAILBOX_TRANSPORT INCOMING_MILTERS OUTGOING_MILTERS
+import_environment = MAIL_CONFIG MAIL_DEBUG MAIL_LOGTAG TZ LANG=C
 
 maillog_file = /dev/stdout
 
@@ -55,7 +55,7 @@ smtpd_data_restrictions =
         reject_unauth_pipelining
 #smtpd_end_of_data_restrictions =
 
-mydomain = $DOMAIN_NAME
+mydomain = $DOMAIN
 myhostname = $HOSTNAME
 myorigin = $mydomain
 mydestination = $mydomain
@@ -69,16 +69,16 @@ mailbox_size_limit = 0
 alias_database = hash:/etc/postfix/aliases
 alias_maps = hash:/etc/postfix/aliases
 
-local_recipient_maps = 
+local_transport = lmtp:inet:$TRANSPORT
+local_recipient_maps =
 recipient_delimiter = +
-mailbox_transport = lmtp:inet:$MAILBOX_TRANSPORT
 
 inet_interfaces = all
 inet_protocols = all
 
 # Milter Configuration
-milter_default_action = accept
-milter_protocol = 6
+milter_default_action = $MILTER_DEFAULT
+milter_protocol = 8
 # Incoming Milters
 smtpd_milters = $INCOMING_MILTERS
 # Outgoing Milters
