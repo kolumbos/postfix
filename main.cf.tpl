@@ -11,6 +11,7 @@ compatibility_level = 3.10
 import_environment = MAIL_CONFIG MAIL_DEBUG MAIL_LOGTAG TZ LANG=C
 
 maillog_file = /dev/stdout
+syslog_name = 
 
 # TLS parameters
 smtpd_tls_auth_only = yes
@@ -78,7 +79,7 @@ inet_protocols = all
 
 # Milter Configuration
 milter_default_action = $MILTER_DEFAULT
-milter_protocol = 8
+milter_protocol = 6
 # Incoming Milters
 smtpd_milters = $INCOMING_MILTERS
 # Outgoing Milters
