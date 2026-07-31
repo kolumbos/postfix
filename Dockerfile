@@ -43,8 +43,9 @@ RUN set -eux; \
     rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
-    mkdir -p /etc/postfix; \
+    mkdir -p /etc/postfix /etc/postfix/ssl; \
     mkdir -p /var/spool/postfix; \
+    chown 600 /etc/postfix/ssl; \
     groupadd -g ${POSTFIX_GID} postfix; \
     useradd -u ${POSTFIX_UID} -g postfix -G root -d /var/spool/postfix -s /usr/sbin/nologin postfix; \
     groupadd -g ${POSTDROP_GID} postdrop
@@ -58,7 +59,7 @@ COPY --chmod=0640 aliases /etc/postfix/aliases
 RUN set -eux; \
     chown postfix /var/spool/postfix/* /var/lib/postfix; \
     chown root /var/spool/postfix/pid; \
-    chmod g+s /usr/sbin/postqueue /usr/sbin/postdrop; \
+    chmod g+s,a+x /usr/sbin/postqueue /usr/sbin/postdrop; \
     chgrp postdrop /var/spool/postfix/maildrop /var/spool/postfix/public /usr/sbin/postqueue /usr/sbin/postdrop
 
 EXPOSE 25
