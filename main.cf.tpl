@@ -10,9 +10,6 @@ compatibility_level = 3.10
 
 import_environment = MAIL_CONFIG MAIL_DEBUG MAIL_LOGTAG TZ LANG=C
 
-maillog_file = /dev/stdout
-syslog_name = 
-
 # TLS parameters
 smtpd_tls_auth_only = yes
 smtpd_tls_cert_file=/etc/postfix/ssl/tls.crt
